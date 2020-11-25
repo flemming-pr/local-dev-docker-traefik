@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    restart: always
+    ports:
+      - "80:80"
+      - "8080:8080" # The Web UI (enabled by --api)
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
